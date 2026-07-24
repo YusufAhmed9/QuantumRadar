@@ -7,11 +7,14 @@ public class Violation {
     private String description;
     private int fine;
     private String plateNumber;
+    private ViolationType violationType;
 
-    public Violation(String description, int fine, String plateNumber) {
+
+    public Violation(String description, int fine, String plateNumber, ViolationType violationType) {
         this.description = description;
         this.fine = fine;
         this.plateNumber = plateNumber;
+        this.violationType = violationType;
         this.id = UUID.randomUUID().toString();
     }
 
@@ -42,6 +45,14 @@ public class Violation {
 
     public String getId() {
         return id;
+    }
+
+    public ViolationType getViolationType() {
+        return violationType;
+    }
+
+    public void setViolationType(ViolationType violationType) {
+        this.violationType = violationType;
     }
 
     public Violation update(Violation violation) {

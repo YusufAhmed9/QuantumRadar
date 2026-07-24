@@ -26,7 +26,7 @@ public class ViolationService implements IViolationService {
 
     private Violation getViolation(String plateNumber, ViolationType violationType) {
         violationCounts[violationType.ordinal()]++;
-        return new Violation(violationType.getDescription(), violationType.getFine(), plateNumber);
+        return new Violation(violationType.getDescription(), violationType.getFine(), plateNumber, violationType);
     }
 
     private void addViolationsToVehicle(String plateNumber, ArrayList<Violation> carViolations) {
@@ -77,10 +77,21 @@ public class ViolationService implements IViolationService {
     }
 
     @Override
+    public ArrayList<Violation> getVehicleFines(String plateNumber) {
+        for (var item : violations) {
+            if (!item.key().equals(plateNumber))
+                continue;
+            return item.value();
+        }
+        return null;
+    }
+
+    @Override
     public Violation removeViolation(String id) {
         for (var item : violations) {
             for (Violation violation : item.value()) {
                 if (id.equals(violation.getId())) {
+                    violationCounts[violation.getViolationType().ordinal()]--;
                     item.value().remove(violation);
                     if (item.value().isEmpty()) {
                         violations.remove(item);
@@ -98,6 +109,10 @@ public class ViolationService implements IViolationService {
         for (var item : violations) {
             for (Violation violation : item.value()) {
                 if (id.equals(violation.getId())) {
+                    if (!newViolation.getViolationType().equals(violation.getViolationType())) {
+                        violationCounts[violation.getViolationType().ordinal()]--;
+                        violationCounts[newViolation.getViolationType().ordinal()]++;
+                    }
                     violation.update(newViolation);
                     return violation;
                 }

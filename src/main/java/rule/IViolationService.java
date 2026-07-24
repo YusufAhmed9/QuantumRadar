@@ -10,6 +10,8 @@ public interface IViolationService {
 
     public void printVehicleFines(String plateNumber);
 
+    public ArrayList<Violation> getVehicleFines(String plateNumber);
+
     public Violation removeViolation(String id);
 
     public Violation updateViolation(String id, Violation newViolation);
